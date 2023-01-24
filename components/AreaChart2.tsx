@@ -10,7 +10,6 @@ import {
   Filler,
   Legend,
   ChartOptions,
-  ScriptableContext,
   ChartData,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
