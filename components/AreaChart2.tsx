@@ -49,10 +49,10 @@ const options: ChartOptions<"line"> = {
   },
   scales: {
     y: {
-      ticks: { color: "gray" },
+      ticks: { color: "#c4c4c4" },
     },
     x: {
-      ticks: { color: "gray" },
+      ticks: { color: "#c4c4c4" },
     },
   },
 };

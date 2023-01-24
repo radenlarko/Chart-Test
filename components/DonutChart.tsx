@@ -64,7 +64,7 @@ const plugins: Plugin<"doughnut">[] = [
       var fontSize = (height / 280).toFixed(2);
       ctx.font = fontSize + "em sans-serif";
       ctx.textBaseline = "middle";
-      ctx.fillStyle = "red";
+      ctx.fillStyle = "#c4c4c4";
 
       var text = "Total",
         textX = Math.round((width - ctx.measureText(text).width) / 2),
@@ -77,17 +77,17 @@ const plugins: Plugin<"doughnut">[] = [
   {
     id: "total",
     beforeDraw: function (chart) {
-      var width = chart.width,
+      const width = chart.width,
         height = chart.height,
         ctx = chart.ctx;
 
       ctx.restore();
-      var fontSize = (height / 200).toFixed(2);
-      ctx.font = fontSize + "em sans-serif";
+      const fontSize = (height / 200).toFixed(2);
+      ctx.font = "600 " + fontSize + "em sans-serif";
       ctx.textBaseline = "middle";
-      ctx.fillStyle = "blue";
+      ctx.fillStyle = "#4a4a4a";
 
-      var text = "2500",
+      const text = "2500",
         textX = Math.round((width - ctx.measureText(text).width) / 2),
         textY = height / 2;
 
