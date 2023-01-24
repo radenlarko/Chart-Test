@@ -47,6 +47,14 @@ const options: ChartOptions<"line"> = {
     intersect: false,
     mode: "index",
   },
+  scales: {
+    y: {
+      ticks: { color: "gray" },
+    },
+    x: {
+      ticks: { color: "gray" },
+    },
+  },
 };
 
 const data: ChartData<"line"> = {
