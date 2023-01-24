@@ -6,6 +6,7 @@ import {
   Legend,
   ChartData,
   ChartOptions,
+  Plugin,
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
@@ -51,8 +52,53 @@ const data: ChartData<"doughnut"> = {
   ],
 };
 
+const plugins: Plugin<"doughnut">[] = [
+  {
+    id: "label",
+    beforeDraw: function (chart) {
+      var width = chart.width,
+        height = chart.height,
+        ctx = chart.ctx;
+
+      ctx.restore();
+      var fontSize = (height / 280).toFixed(2);
+      ctx.font = fontSize + "em sans-serif";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "red";
+
+      var text = "Total",
+        textX = Math.round((width - ctx.measureText(text).width) / 2),
+        textY = height / 2.4;
+
+      ctx.fillText(text, textX, textY);
+      ctx.save();
+    },
+  },
+  {
+    id: "total",
+    beforeDraw: function (chart) {
+      var width = chart.width,
+        height = chart.height,
+        ctx = chart.ctx;
+
+      ctx.restore();
+      var fontSize = (height / 200).toFixed(2);
+      ctx.font = fontSize + "em sans-serif";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "blue";
+
+      var text = "2500",
+        textX = Math.round((width - ctx.measureText(text).width) / 2),
+        textY = height / 2;
+
+      ctx.fillText(text, textX, textY);
+      ctx.save();
+    },
+  },
+];
+
 const DonutChart = () => {
-  return <Doughnut data={data} options={options} />;
+  return <Doughnut data={data} options={options} plugins={plugins} />;
 };
 
 export default DonutChart;
