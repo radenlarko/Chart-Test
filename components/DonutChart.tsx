@@ -42,7 +42,7 @@ const DonutChart = ({
   });
 
   const textColor = useColorModeValue("#4A5568", "#CBD5E0");
-  const strokeColor = useColorModeValue("white", "gray.900");
+  const strokeColor = useColorModeValue("white", "#171923");
   const labelColor = useColorModeValue(
     labelColorCenter || "gray.400",
     labelColorCenter || "gray.500"
