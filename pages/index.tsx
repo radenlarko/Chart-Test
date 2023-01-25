@@ -11,9 +11,12 @@ import AreaChart2 from "@/components/AreaChart2";
 import DonutChart from "@/components/DonutChart";
 import BarChart from "@/components/BarChart";
 import ColorModeToggle from "@/components/ColorModeToggle";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import dataCharts, { DataChart } from "@/utils/dataChart";
 import GridItemCard from "@/components/GridItemCard";
+import HeaderChart from "@/components/HeaderChart";
+import { myNumberFormat } from "@/utils/myFormat";
+import { mySum } from "@/utils/myFunction";
 
 const tahun = new Date().getFullYear();
 
@@ -39,6 +42,15 @@ export default function Home() {
 
     getCurrentData();
   }, [selectYear]);
+
+  const totalData = useMemo(() => {
+    if (selectedData.length === 0) {
+      return 0;
+    }
+
+    const val = mySum(selectedData.map((item) => item.value));
+    return val;
+  }, [selectedData]);
 
   return (
     <>
@@ -96,18 +108,39 @@ export default function Home() {
               gap={4}
             >
               <GridItemCard colSpan={{ base: 5, lg: 2 }}>
+                <HeaderChart
+                  title="Issue By Category"
+                  value={`${myNumberFormat(totalData)} Issues`}
+                  label="has ocurred"
+                />
                 <DonutChart dataChart={selectedData} />
               </GridItemCard>
               <GridItemCard colSpan={{ base: 5, lg: 3 }}>
+                <HeaderChart
+                  title="Issues Overview"
+                  value={`${myNumberFormat(totalData)} Issues`}
+                  label="has ocurred"
+                />
                 <AreaChart2
                   dataChart={selectedData}
                   rgbColor={[200, 75, 142]}
                 />
               </GridItemCard>
               <GridItemCard colSpan={5}>
+                <HeaderChart
+                  title="Issues Overview"
+                  value={`${myNumberFormat(totalData)} Issues`}
+                  label="has ocurred"
+                />
                 <BarChart dataChart={selectedData} />
               </GridItemCard>
               <GridItemCard colSpan={5} isDark>
+                <HeaderChart
+                  title="Issues Overview"
+                  value={`${myNumberFormat(totalData)} Issues`}
+                  label="has ocurred"
+                  isDark
+                />
                 <BarChart dataChart={selectedData} isDark />
               </GridItemCard>
             </Grid>
