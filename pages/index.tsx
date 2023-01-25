@@ -96,7 +96,7 @@ export default function Home() {
               gap={4}
             >
               <GridItemCard colSpan={{ base: 5, lg: 2 }}>
-                <DonutChart />
+                <DonutChart dataChart={selectedData} />
               </GridItemCard>
               <GridItemCard colSpan={{ base: 5, lg: 3 }}>
                 <AreaChart2 />

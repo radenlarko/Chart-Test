@@ -19,41 +19,33 @@ import { mySum } from "@/utils/myFunction";
 import { myNumberFormat } from "@/utils/myFormat";
 import { Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import { ChartJSOrUndefined } from "react-chartjs-2/dist/types";
+import { DataChart } from "@/utils/dataChart";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const dataChart = [
-  {
-    label: "Red",
-    value: 12,
-  },
-  {
-    label: "Blue",
-    value: 19,
-  },
-  {
-    label: "Yellow",
-    value: 3,
-  },
-  {
-    label: "Green",
-    value: 5,
-  },
-  {
-    label: "Purple",
-    value: 2,
-  },
-  {
-    label: "Orange",
-    value: 3,
-  },
-];
+interface Props {
+  dataChart: DataChart[];
+  customInfoCenter?: React.ReactNode;
+  labelColorCenter?: string;
+  valueColorCenter?: string;
+}
 
-const DonutChart = () => {
+const DonutChart = ({
+  dataChart,
+  customInfoCenter,
+  labelColorCenter,
+  valueColorCenter,
+}: Props) => {
   const [dataCenter, setDataCenter] = useState({
     label: "",
     value: 0,
   });
+
+  const strokeColor = useColorModeValue("white", "gray.900");
+  const labelColor = useColorModeValue(
+    labelColorCenter || "gray.400",
+    labelColorCenter || "gray.500"
+  );
 
   const chartRef =
     useRef<ChartJSOrUndefined<"doughnut", number[], unknown>>(null);
@@ -61,47 +53,38 @@ const DonutChart = () => {
   const data = useMemo<ChartData<"doughnut">>(() => {
     const labelList = dataChart.map((item) => item.label);
     const valueList = dataChart.map((item) => item.value);
+    const colorList = dataChart.map((item) => item.color);
     return {
       labels: labelList,
       datasets: [
         {
           label: "# of Votes",
           data: valueList,
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
-          ],
-          borderColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 159, 64, 1)",
-          ],
-          borderWidth: 1,
+          backgroundColor: colorList,
+          borderColor: [strokeColor],
+          borderWidth: 2,
+          borderRadius: 4
         },
       ],
     };
-  }, []);
+  }, [dataChart, strokeColor]);
 
-  const handleSetInfo = useCallback((elements: ActiveElement[]) => {
-    if (elements.length === 0) {
-      return;
-    }
+  const handleSetInfo = useCallback(
+    (elements: ActiveElement[]) => {
+      if (elements.length === 0) {
+        return;
+      }
 
-    const idx = elements[0].index;
-    const dataSet = dataChart[idx];
+      const idx = elements[0].index;
+      const dataSet = dataChart[idx];
 
-    setDataCenter({
-      label: dataSet.label,
-      value: dataSet.value,
-    });
-  }, []);
+      setDataCenter({
+        label: dataSet.label,
+        value: dataSet.value,
+      });
+    },
+    [dataChart]
+  );
 
   const options = useMemo<ChartOptions<"doughnut">>(() => {
     return {
@@ -172,7 +155,7 @@ const DonutChart = () => {
       label: "Total",
       value: total,
     });
-  }, []);
+  }, [dataChart]);
 
   const charWidth = chartRef.current?.width || 0;
 
@@ -181,33 +164,38 @@ const DonutChart = () => {
       <Doughnut ref={chartRef} data={data} options={options} />
       <Flex
         position="absolute"
-        top={charWidth / 4}
-        right={charWidth / 3.25}
+        top={{base: charWidth / 6.4, md: charWidth / 5.4}}
+        right={{base: charWidth / 2.85, md: charWidth / 3.25}}
         direction="column"
         alignItems="center"
         justifyContent="center"
-        w={charWidth / 2.6}
-        h={charWidth / 2.6}
+        w={{base: charWidth / 3.4, md: charWidth / 2.6}}
+        h={{base: charWidth / 3.4, md: charWidth / 2.6}}
         borderRadius="full"
       >
-        <Box textAlign="center" mt={{ base: -20, md: -2 }}>
-          <Text
-            title={dataCenter.label}
-            color={useColorModeValue("gray.400", "gray.500")}
-            fontSize={{ base: "md", md: "lg" }}
-            noOfLines={1}
-          >
-            {dataCenter.label}
-          </Text>
-          <Text
-            title={myNumberFormat(dataCenter.value)}
-            fontSize={{ base: "2xl", md: "4xl" }}
-            fontWeight={500}
-            noOfLines={1}
-          >
-            {myNumberFormat(dataCenter.value)}
-          </Text>
-        </Box>
+        {customInfoCenter ? (
+          customInfoCenter
+        ) : (
+          <Box textAlign="center" mt={{ base: -4, md: -2 }}>
+            <Text
+              title={dataCenter.label}
+              color={labelColor}
+              fontSize={{ base: "md", md: "lg" }}
+              noOfLines={1}
+            >
+              {dataCenter.label}
+            </Text>
+            <Text
+              title={myNumberFormat(dataCenter.value)}
+              fontSize={{ base: "2xl", md: "4xl" }}
+              fontWeight={500}
+              noOfLines={1}
+              color={valueColorCenter}
+            >
+              {myNumberFormat(dataCenter.value)}
+            </Text>
+          </Box>
+        )}
       </Flex>
     </Box>
   );
