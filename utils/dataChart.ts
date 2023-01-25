@@ -1,11 +1,11 @@
-interface DataChart {
+export interface DataChart {
   label: string;
   value: number;
   color: string;
 }
 
-interface DataCharts {
-  label: string;
+export interface DataCharts {
+  label: number;
   data: DataChart[];
 }
 
@@ -137,11 +137,11 @@ const data2023: DataChart[] = [
 
 const dataCharts: DataCharts[] = [
   {
-    label: "2022",
+    label: new Date().getFullYear() - 1,
     data: data2022,
   },
   {
-    label: "2023",
+    label: new Date().getFullYear(),
     data: data2023,
   },
 ];
