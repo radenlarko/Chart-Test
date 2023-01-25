@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +11,7 @@ import {
   ChartData,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { DataChart } from "@/utils/dataChart";
 
 ChartJS.register(
   CategoryScale,
@@ -20,6 +21,13 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+interface Props {
+  dataChart: DataChart[];
+  isDark?: boolean;
+  colorBar?: string;
+  maxWidthBar?: number;
+}
 
 const options: ChartOptions<"bar"> = {
   responsive: true,
@@ -53,20 +61,29 @@ const options: ChartOptions<"bar"> = {
   },
 };
 
-const data: ChartData<"bar"> = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [100, 400, 200, 300, 700, 400, 600],
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-      maxBarThickness: 20,
-      borderRadius: 8,
-    },
-  ],
-};
+const BarChart = ({ dataChart, isDark, colorBar, maxWidthBar }: Props) => {
+  const data = useMemo<ChartData<"bar">>(() => {
+    const labelList = dataChart.map((item) => item.label);
+    const valueList = dataChart.map((item) => item.value);
+    const bgColor = isDark
+      ? "rgba(255, 255, 255, 0.7)"
+      : colorBar
+      ? colorBar
+      : "rgba(79, 209, 197, 1)";
+    return {
+      labels: labelList,
+      datasets: [
+        {
+          label: "Dataset 1",
+          data: valueList,
+          backgroundColor: bgColor,
+          maxBarThickness: maxWidthBar || 20,
+          borderRadius: 8,
+        },
+      ],
+    };
+  }, [dataChart, isDark, colorBar, maxWidthBar]);
 
-const BarChart = () => {
   return <Bar options={options} data={data} />;
 };
 

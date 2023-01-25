@@ -105,13 +105,10 @@ export default function Home() {
                 />
               </GridItemCard>
               <GridItemCard colSpan={5}>
-                <BarChart />
+                <BarChart dataChart={selectedData} />
               </GridItemCard>
               <GridItemCard colSpan={5} isDark>
-                <Text>4</Text>
-                <pre>
-                  <code>{JSON.stringify(selectedData, null, 2)}</code>
-                </pre>
+                <BarChart dataChart={selectedData} isDark />
               </GridItemCard>
             </Grid>
           </Box>
