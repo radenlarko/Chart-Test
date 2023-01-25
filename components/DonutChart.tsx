@@ -41,6 +41,7 @@ const DonutChart = ({
     value: 0,
   });
 
+  const textColor = useColorModeValue("#4A5568", "#CBD5E0");
   const strokeColor = useColorModeValue("white", "gray.900");
   const labelColor = useColorModeValue(
     labelColorCenter || "gray.400",
@@ -101,12 +102,13 @@ const DonutChart = ({
             usePointStyle: true,
             pointStyle: "circle",
             padding: 20,
+            color: textColor
           },
         },
       },
       onClick: (_, elements) => handleSetInfo(elements),
     };
-  }, [handleSetInfo]);
+  }, [handleSetInfo, textColor]);
 
   // const plugins = useMemo<Plugin<"doughnut">[]>(() => {
   //   return [
