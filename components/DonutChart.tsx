@@ -53,7 +53,13 @@ const DonutChart = ({
   const data = useMemo<ChartData<"doughnut">>(() => {
     const labelList = dataChart.map((item) => item.label);
     const valueList = dataChart.map((item) => item.value);
-    const colorList = dataChart.map((item) => item.color);
+    const colorList = dataChart.map((item) => {
+      if (item.color) {
+        return item.color;
+      }
+
+      return "white";
+    });
     return {
       labels: labelList,
       datasets: [
@@ -63,7 +69,7 @@ const DonutChart = ({
           backgroundColor: colorList,
           borderColor: [strokeColor],
           borderWidth: 2,
-          borderRadius: 4
+          borderRadius: 4,
         },
       ],
     };
@@ -164,13 +170,13 @@ const DonutChart = ({
       <Doughnut ref={chartRef} data={data} options={options} />
       <Flex
         position="absolute"
-        top={{base: charWidth / 6.4, md: charWidth / 5.4}}
-        right={{base: charWidth / 2.85, md: charWidth / 3.25}}
+        top={{ base: charWidth / 6.4, md: charWidth / 5.4 }}
+        right={{ base: charWidth / 2.85, md: charWidth / 3.25 }}
         direction="column"
         alignItems="center"
         justifyContent="center"
-        w={{base: charWidth / 3.4, md: charWidth / 2.6}}
-        h={{base: charWidth / 3.4, md: charWidth / 2.6}}
+        w={{ base: charWidth / 3.4, md: charWidth / 2.6 }}
+        h={{ base: charWidth / 3.4, md: charWidth / 2.6 }}
         borderRadius="full"
       >
         {customInfoCenter ? (

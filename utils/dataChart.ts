@@ -1,7 +1,7 @@
 export interface DataChart {
   label: string;
   value: number;
-  color: string;
+  color?: string;
 }
 
 export interface DataCharts {
