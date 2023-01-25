@@ -6,12 +6,12 @@ import {
   Legend,
   ChartData,
   ChartOptions,
-  Plugin,
   ActiveElement,
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { mySum } from "@/utils/myFunction";
 import { myNumberFormat } from "@/utils/myFormat";
+import { Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -109,52 +109,52 @@ const DonutChart = () => {
     };
   }, [handleSetInfo]);
 
-  const plugins = useMemo<Plugin<"doughnut">[]>(() => {
-    return [
-      {
-        id: "label",
-        beforeDraw: function (chart) {
-          var width = chart.width,
-            height = chart.height,
-            ctx = chart.ctx;
+  // const plugins = useMemo<Plugin<"doughnut">[]>(() => {
+  //   return [
+  //     {
+  //       id: "label",
+  //       beforeDraw: function (chart) {
+  //         var width = chart.width,
+  //           height = chart.height,
+  //           ctx = chart.ctx;
 
-          ctx.restore();
-          var fontSize = (height / 280).toFixed(2);
-          ctx.font = fontSize + "em sans-serif";
-          ctx.textBaseline = "middle";
-          ctx.fillStyle = "#c4c4c4";
+  //         ctx.restore();
+  //         var fontSize = (height / 280).toFixed(2);
+  //         ctx.font = fontSize + "em sans-serif";
+  //         ctx.textBaseline = "middle";
+  //         ctx.fillStyle = "#c4c4c4";
 
-          var text = dataCenter.label,
-            textX = Math.round((width - ctx.measureText(text).width) / 2),
-            textY = height / 2.4;
+  //         var text = dataCenter.label,
+  //           textX = Math.round((width - ctx.measureText(text).width) / 2),
+  //           textY = height / 2.4;
 
-          ctx.fillText(text, textX, textY);
-          ctx.save();
-        },
-      },
-      {
-        id: "total",
-        beforeDraw: function (chart) {
-          const width = chart.width,
-            height = chart.height,
-            ctx = chart.ctx;
+  //         ctx.fillText(text, textX, textY);
+  //         ctx.save();
+  //       },
+  //     },
+  //     {
+  //       id: "total",
+  //       beforeDraw: function (chart) {
+  //         const width = chart.width,
+  //           height = chart.height,
+  //           ctx = chart.ctx;
 
-          ctx.restore();
-          const fontSize = (height / 200).toFixed(2);
-          ctx.font = "600 " + fontSize + "em sans-serif";
-          ctx.textBaseline = "middle";
-          ctx.fillStyle = "#4a4a4a";
+  //         ctx.restore();
+  //         const fontSize = (height / 200).toFixed(2);
+  //         ctx.font = "600 " + fontSize + "em sans-serif";
+  //         ctx.textBaseline = "middle";
+  //         ctx.fillStyle = "#4a4a4a";
 
-          const text = myNumberFormat(dataCenter.value),
-            textX = Math.round((width - ctx.measureText(text).width) / 2),
-            textY = height / 2;
+  //         const text = myNumberFormat(dataCenter.value),
+  //           textX = Math.round((width - ctx.measureText(text).width) / 2),
+  //           textY = height / 2;
 
-          ctx.fillText(text, textX, textY);
-          ctx.save();
-        },
-      },
-    ];
-  }, [dataCenter]);
+  //         ctx.fillText(text, textX, textY);
+  //         ctx.save();
+  //       },
+  //     },
+  //   ];
+  // }, [dataCenter]);
 
   useEffect(() => {
     const total = mySum(dataChart.map((item) => item.value));
@@ -164,13 +164,32 @@ const DonutChart = () => {
     });
   }, []);
 
-  return dataCenter.value === 0 ? null : (
-    <>
-      <pre>
-        <code>{JSON.stringify(dataCenter, null, 2)}</code>
-      </pre>
-      <Doughnut data={data} options={options} plugins={plugins} />
-    </>
+  return (
+    <Box position="relative">
+      <Doughnut data={data} options={options} />
+      <Flex
+        position="absolute"
+        top={0}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        w={"full"}
+        h={"full"}
+        zIndex={-1}
+      >
+        <Box textAlign="center" mt={{ base: -20, md: -14 }}>
+          <Text
+            color={useColorModeValue("gray.400", "gray.500")}
+            fontSize={{ base: "md", md: "lg" }}
+          >
+            {dataCenter.label}
+          </Text>
+          <Text fontSize={{ base: "2xl", md: "4xl" }} fontWeight={500}>
+            {dataCenter.value}
+          </Text>
+        </Box>
+      </Flex>
+    </Box>
   );
 };
 
