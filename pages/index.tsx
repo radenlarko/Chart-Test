@@ -99,7 +99,10 @@ export default function Home() {
                 <DonutChart dataChart={selectedData} />
               </GridItemCard>
               <GridItemCard colSpan={{ base: 5, lg: 3 }}>
-                <AreaChart2 />
+                <AreaChart2
+                  dataChart={selectedData}
+                  rgbColor={[200, 75, 142]}
+                />
               </GridItemCard>
               <GridItemCard colSpan={5}>
                 <BarChart />

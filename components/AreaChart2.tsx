@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,6 +13,7 @@ import {
   ChartData,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import { DataChart } from "@/utils/dataChart";
 
 ChartJS.register(
   CategoryScale,
@@ -60,32 +61,42 @@ const options: ChartOptions<"line"> = {
   },
 };
 
-const data: ChartData<"line"> = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      fill: true,
-      label: "Mobile",
-      data: [0.1, 0.4, 0.2, 0.3, 0.7, 0.4, 0.6, 0.3],
-      tension: 0.3,
-      pointStyle: "circle",
-      pointBorderWidth: 0,
-      pointBackgroundColor: "rgba(79, 209, 197, 0)",
-      pointHoverBackgroundColor: "rgba(79, 209, 197, 1)",
-      borderWidth: 4,
-      borderColor: "rgba(79, 209, 197, 1)",
-      backgroundColor: (context) => {
-        const ctx = context.chart.ctx;
-        const gradient = ctx.createLinearGradient(0, 0, 0, 500);
-        gradient.addColorStop(0, "rgba(79, 209, 197, 0.35)");
-        gradient.addColorStop(1, "rgba(79, 209, 197, 0.05)");
-        return gradient;
-      },
-    },
-  ],
-};
+interface Props {
+  dataChart: DataChart[];
+  rgbColor?: number[];
+}
 
-const AreaChart2 = () => {
+const AreaChart2 = ({ dataChart, rgbColor }: Props) => {
+  const data = useMemo<ChartData<"line">>(() => {
+    const labelList = dataChart.map((item) => item.label);
+    const valueList = dataChart.map((item) => item.value);
+
+    const newRGB = rgbColor ? rgbColor.join() : "79, 209, 197";
+    return {
+      labels: labelList,
+      datasets: [
+        {
+          fill: true,
+          label: "Mobile",
+          data: valueList,
+          tension: 0.3,
+          pointStyle: "circle",
+          pointBorderWidth: 0,
+          pointBackgroundColor: `rgba(${newRGB}, 0)`,
+          pointHoverBackgroundColor: `rgba(${newRGB}, 1)`,
+          borderWidth: 4,
+          borderColor: `rgba(${newRGB}, 1)`,
+          backgroundColor: (context) => {
+            const ctx = context.chart.ctx;
+            const gradient = ctx.createLinearGradient(0, 0, 0, 500);
+            gradient.addColorStop(0, `rgba(${newRGB}, 0.35)`);
+            gradient.addColorStop(1, `rgba(${newRGB}, 0.05)`);
+            return gradient;
+          },
+        },
+      ],
+    };
+  }, [dataChart, rgbColor]);
   return <Line options={options} data={data} />;
 };
 
