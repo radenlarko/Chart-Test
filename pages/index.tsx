@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Box, Text } from "@chakra-ui/react";
 import AreaChart2 from "@/components/AreaChart2";
 import DonutChart from "@/components/DonutChart";
+import BarChart from "@/components/BarChart";
 
 export default function Home() {
   return (
@@ -16,9 +17,10 @@ export default function Home() {
         <Box maxW={"7xl"} minH={"100vh"} mx="auto" p={{ base: 2, md: 8 }}>
           <Text>Hello World</Text>
           <AreaChart2 />
-          <Box maxW={720} mt={10}>
-          <DonutChart />
+          <Box maxW={720} my={10}>
+            <DonutChart />
           </Box>
+          <BarChart />
         </Box>
       </main>
     </>

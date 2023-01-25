@@ -53,6 +53,9 @@ const options: ChartOptions<"line"> = {
     },
     x: {
       ticks: { color: "#c4c4c4" },
+      grid: {
+        display: false,
+      },
     },
   },
 };
